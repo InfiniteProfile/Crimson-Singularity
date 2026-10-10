@@ -28,91 +28,78 @@ function rngFor(id) {
   return r;
 }
 const V = {
-  on: ["V","K","Th","S","L","M","N","R","D","Z","Ael","Cy","Ia","Ka","Or","Se","Ta","Ve","Yu","Xa","Br","Cl","Gr","Pr","Sh","F","H","J","Q","W"],
+  on: ["V","K","Th","S","L","M","N","R","D","Z","Ael","Cy","Ia","Ka","Or","Se","Ta","Ve","Yu","Xa","Br","Cl","Gr","Pr","Sh","F","H","J","Q","Tz","Ny","Od"],
   vo: ["a","e","i","o","u","ae","ia","ei","ou","y","ai","io"],
-  co: ["","n","r","l","s","th","x","m","k","ra","na","la","ris","len","dan","mir","vek","sen","tar","zon"],
-  sp: ["Vael","Ordin","Kest","Ash","Mor","Thal","Ir","Sol","Nox","Quill","Hal","Bran","Cael","Dusk","Fen","Grey","Lorn","Wyr","Ves","Tor"],
-  ss: ["hart","wen","drake","mere","vane","lowe","sten","ryn","thorn","field","well","crest","brook","shade","mark","wick"],
-  traits: ["Patient","Restless","Wry","Meticulous","Fearless","Guarded","Tender","Relentless","Dreamy","Blunt","Curious","Stoic","Playful","Watchful","Gracious","Stubborn","Luminous","Dry-humoured","Methodical","Reckless","Loyal","Elusive","Warm","Exacting"],
-  roles: ["Lanternkeeper","Ring cartographer","Signal archivist","Tide mechanic","Void courier","Glasswright","Orbit surveyor","Memory broker","Dockside medic","Star-chart forger","Silence translator","Beam tender","Salvage diver","Ledger monk","Weather clerk","Orchard engineer","Echo tuner","Gate inspector","Night baker","Cargo poet","Clockmaker","Customs diplomat","Relay pilot","Ink restorer"],
+  co: ["","n","r","l","s","th","x","m","k","dr","vor","zen","mar","tal"],
+  en: ["ar","oth","ion","ax","ris","eon","ul","ara","is","yx","um","or","eth","ath"],
+  suf: ["Prime","Minor","Reach","Veil","Hollow","Deep","Crown","Verge"],
+  rom: ["II","III","IV","V","VI","VII","VIII","IX","X","XII"],
+  types: ["Ringed giant","Ash world","Ice dwarf","Ember world","Glass desert","Storm giant","Basalt world","Tar ocean world","Frozen titan","Dark gas giant","Crater world","Obsidian world","Salt moon","Twilight world"],
+  atm: ["a thin silver haze","drifting crimson dust","almost no air","methane mist","ion storms","cold fog","slow white clouds","a veil of ash"],
+  feat: ["glass storms","singing ice","black dunes","rivers of tar","floating ridges","silent canyons","ring shadows","lightning plains","mirror lakes","red auroras","buried cities of salt","endless twilight","humming caves","crystal forests","frozen waterfalls","magnetic spires"],
+  tr: ["Silent","Cold","Restless","Ancient","Brooding","Luminous","Remote","Stormy","Patient","Austere","Hollow","Radiant","Watchful","Slow"],
   o1: ["Ring","Ash","Umbra","Halo","Cinder","Vesper","Rift","Pale","Ember","Obsidian","Silt","Crescent"],
   o2: ["Terrace","Harbor","Spire","Reach","Quarter","Drift","Station","Hollow","Landing","Arc","Market","Stair"],
   ring: ["First","Second","Third","Fifth","Seventh","Ninth","Eleventh","Outer","Lower","Hidden"],
-  hobby: ["slow chess","pressing red glass","mapping rings","night markets","repairing radios","tidal music","growing moss","cold swimming","letter writing","stargazing without lenses","archive wandering","cooking for crowds","bell ringing","kite building","collecting silence","sketching faces","walking the dark side","mending coats","riddle trading","bookbinding","clock repair","pickling","old maps","choir singing"],
-  joy: ["when the beam is brightest and the docks are quiet","in the hour after the last ship leaves","with a map unfolded and nowhere to be","trading small secrets for small favours","when someone else needs help with something difficult"],
-  end: ["Few know the full story, and fewer ask.","Keeps a notebook of every face met, still unfinished.","Has never been seen leaving at the same hour twice.","Is owed a favour by at least three strangers.","Intends, someday, to follow the red light to its source.","Remembers every promise, especially the ones others forgot."]
+  end: ["Few ships have ever landed, and fewer have left.","Its orbit is slowly drifting toward the red beam.","Travellers report that it looks different at every visit.","No chart agrees on where it ends.","It was named by the first crew to survive its night.","The beam is visible from its darkest side."]
 };
-const SKIN = ["#f0cfb4","#e3b48d","#c98d63","#a06643","#74462c","#4e2e1e","#f6dcc6","#b87c56","#8a5538","#dcb08a"];
-const HAIRC = ["#0d0d0d","#2a1a12","#4a3020","#7a5a3a","#b8b8bd","#d9d9dc","#5a0a10","#1e1e24","#8c6c4c"];
-const CLOTH = ["#1d1d22","#2a2a30","#3a0a10","#55555c","#8b000b","#c7c9ce","#16161a","#40232a","#2f3138","#6d6d74"];
+const BASE = ["#0c0c0e","#16161a","#232328","#34343a","#4a4a52","#6d6d74","#8d8f95","#2b0a0f","#4a0a12","#8B000B","#c7c9ce"];
 const cap = s => s[0].toUpperCase() + s.slice(1);
 
 function gen(id) {
   const r = rngFor(id);
-  const syl = () => r.p(V.on) + r.p(V.vo) + (r.f() < .6 ? r.p(V.co) : "");
-  let first = syl() + (r.f() < .55 ? r.p(V.vo) + r.p(V.co) : "");
-  first = cap(first.toLowerCase()).replace(/(.)\1\1+/g, "$1$1");
-  const last = r.p(V.sp) + r.p(V.ss);
-  const [t1, t2] = r.many(V.traits, 2);
-  const role = r.p(V.roles);
+  let base = r.p(V.on) + r.p(V.vo) + (r.f() < .5 ? r.p(V.co) : "") + r.p(V.en);
+  base = cap(base.toLowerCase()).replace(/(.)\1\1+/g, "$1$1");
+  const q = r.f(), name = q < .45 ? `${base} ${r.p(V.rom)}` : q < .65 ? `${base} ${r.p(V.suf)}` : base;
+  const [t1, t2] = r.many(V.tr, 2), type = r.p(V.types), atm = r.p(V.atm);
   const origin = `${r.p(V.o1)} ${r.p(V.o2)}, ${r.p(V.ring)} Ring`;
-  const hobbies = r.many(V.hobby, 3);
-  const age = 19 + r.i(62);
-  const bio = `${first} was born in ${origin}. ${t1} by nature and ${t2.toLowerCase()} when pressed, they now work as a ${role.toLowerCase()}. They are happiest ${r.p(V.joy)}, and spend free hours on ${hobbies[0]} and ${hobbies[1]}. ${r.p(V.end)}`;
+  const feats = r.many(V.feat, 3), moons = r.i(10);
+  const R = 40 + r.i(20), bands = [];
+  for (let i = 0, n = r.i(7); i < n; i++) bands.push({ y: -R + r.i(2 * R), h: 3 + r.i(10), o: .15 + r.f() * .4 });
+  const stars = []; for (let i = 0; i < 16; i++) stars.push([r.i(200), r.i(200), .4 + r.f() * .9, .25 + r.f() * .6]);
+  const bio = `${name} is a ${type.toLowerCase()} circling in ${origin}. It is ${t1.toLowerCase()} and ${t2.toLowerCase()}, wrapped in ${atm}. ${moons ? `It keeps ${moons} moon${moons > 1 ? "s" : ""}` : "It keeps no moons"}, and its surface is known for ${feats[0]} and ${feats[1]}. ${r.p(V.end)}`;
   return {
-    id, name: `${first} ${last}`, first, role, origin, age, t: [t1, t2], hobbies, bio,
-    desc: `${t1}, ${t2.toLowerCase()}. ${role}.`,
-    av: { skin: r.p(SKIN), hair: r.p(HAIRC), cloth: r.p(CLOTH), style: r.i(7), cs: r.i(4), eye: r.p(["#222","#3b2a1a","#2b4a5a","#4a5a3a","#6a6a70"]),
-      w: 34 + r.i(9), h: 42 + r.i(7), side: r.f() < .5 ? -1 : 1, glow: r.i(3), mouth: r.i(3), brow: r.i(3), acc: r.i(5), bgx: 30 + r.i(40) }
+    id, name, type, atm, origin, t: [t1, t2], feats, moons, bio,
+    diam: (3000 + r.i(140000)).toLocaleString("en-US") + " km", orbit: (20 + r.i(9000)).toLocaleString("en-US") + " days",
+    grav: (.1 + r.f() * 3.4).toFixed(2) + " g", temp: (-230 + r.i(560)) + " °C",
+    desc: `${t1}, ${t2.toLowerCase()} ${type.toLowerCase()}.`,
+    av: { R, bands, stars, base: r.p(BASE), band: r.p(BASE), side: r.f() < .5 ? -1 : 1, glow: r.i(3), ring: r.f() < .4, rc: 2 + r.i(3), tilt: -28 + r.i(56),
+      craters: r.f() < .5 ? [0,1,2,3,4].map(() => [r.i(2 * R) - R, r.i(2 * R) - R, 2 + r.i(7)]) : [], moonA: [0,1,2].slice(0, Math.min(moons, 3)).map(() => r.f() * 6.28), beam: r.f() < .6 }
   };
 }
 
-/* ---------- Procedural portrait (SVG, no network) ---------- */
+/* ---------- Procedural planet (SVG, no network) ---------- */
 function avatar(p) {
-  const a = p.av, s = a.skin, hx = 100, hy = 86, rx = a.w, ry = a.h, side = a.side;
-  const back = [
-    "", `<path d="M${hx-rx-8} 100C${hx-rx-14} 30 ${hx+rx+14} 30 ${hx+rx+8} 100L${hx+rx+14} 175L${hx-rx-14} 175Z" fill="${a.hair}"/>`, "", "", "",
-    `<path d="M${hx-rx-6} 92C${hx-rx-12} 40 ${hx+rx+12} 40 ${hx+rx+6} 92L${hx+rx+8} 128L${hx-rx-8} 128Z" fill="${a.hair}"/>`, ""
-  ][a.style];
-  const front = [
-    `<path d="M${hx-rx-3} 84C${hx-rx} 36 ${hx+rx} 36 ${hx+rx+3} 84C${hx+rx-6} 62 ${hx-rx+6} 62 ${hx-rx-3} 84Z" fill="${a.hair}"/>`,
-    `<path d="M${hx-rx-2} 90C${hx-rx} 38 ${hx+rx} 38 ${hx+rx+2} 90C${hx+10} 56 ${hx-rx+8} 60 ${hx-rx-2} 90Z" fill="${a.hair}"/>`,
-    `<circle cx="${hx}" cy="${hy-ry-8}" r="15" fill="${a.hair}"/><path d="M${hx-rx-2} 80C${hx-rx} 38 ${hx+rx} 38 ${hx+rx+2} 80C${hx+rx-8} 64 ${hx-rx+8} 64 ${hx-rx-2} 80Z" fill="${a.hair}"/>`,
-    "",
-    `<path d="M${hx-rx-1} 80C${hx-rx} 42 ${hx+rx} 42 ${hx+rx+1} 80C${hx+rx-4} 68 ${hx-rx+4} 68 ${hx-rx-1} 80Z" fill="${a.hair}" opacity=".85"/>`,
-    `<path d="M${hx-rx-4} 84C${hx-rx-4} 36 ${hx+rx+4} 36 ${hx+rx+4} 84C${hx+rx-4} 60 ${hx-6} 56 ${hx-rx-4} 84Z" fill="${a.hair}"/>`,
-    `<path d="M${hx-10} ${hy-ry-12}h20l4 30h-28Z" fill="${a.hair}"/>`
-  ][a.style];
-  const collar = [
-    `<path d="M${hx-16} 150L${hx} 170L${hx+16} 150Z" fill="${s}"/>`,
-    `<rect x="${hx-18}" y="140" width="36" height="14" rx="6" fill="${a.cloth}" stroke="#ffffff22"/>`,
-    `<path d="M${hx-14} 146L${hx} 158L${hx+14} 146" stroke="#C7C9CE" stroke-width="1.5" fill="none"/>`,
-    `<path d="M${hx} 150V200" stroke="#FF202A" stroke-width="1.5"/>`
-  ][a.cs];
-  const eyeY = hy - 4, ex = Math.round(rx * .42);
-  const accs = ["", `<circle cx="${hx-ex}" cy="${eyeY}" r="9" fill="none" stroke="#C7C9CE" stroke-width="1.4"/><circle cx="${hx+ex}" cy="${eyeY}" r="9" fill="none" stroke="#C7C9CE" stroke-width="1.4"/><path d="M${hx-ex+9} ${eyeY}h${2*ex-18}" stroke="#C7C9CE" stroke-width="1.4"/>`,
-    `<circle cx="${hx-rx}" cy="${hy+10}" r="2.6" fill="#C7C9CE"/>`, `<path d="M${hx-rx+8} ${hy+16}q4 10 10 10" stroke="#00000055" stroke-width="1.5" fill="none"/>`, `<path d="M${hx-ex-6} ${eyeY-3}l12 10M${hx-ex-2} ${eyeY-3}l12 10" stroke="#00000000"/>`][a.acc];
-  const brow = [`M${hx-ex-8} ${eyeY-9}q8-5 16 0M${hx+ex-8} ${eyeY-9}q8-5 16 0`, `M${hx-ex-8} ${eyeY-9}h16M${hx+ex-8} ${eyeY-9}h16`, `M${hx-ex-8} ${eyeY-7}q8-6 16-2M${hx+ex-8} ${eyeY-9}q8-4 16 2`][a.brow];
-  const mouth = [`M${hx-9} ${hy+26}q9 6 18 0`, `M${hx-8} ${hy+27}h16`, `M${hx-9} ${hy+25}q9 -2 18 2`][a.mouth];
-  const rim = `<path d="M${hx+side*(rx-1)} ${hy-ry*.55}A${rx} ${ry} 0 0 ${side>0?1:0} ${hx+side*(rx-1)} ${hy+ry*.5}" fill="none" stroke="#FF202A" stroke-width="${1.2+a.glow*.5}" opacity="${.45+a.glow*.15}"/>`;
-  const shade = `<ellipse cx="${hx-side*rx*.45}" cy="${hy+6}" rx="${rx*.6}" ry="${ry*.9}" fill="#000" opacity=".28"/>`;
-  return `<svg viewBox="0 0 200 200" role="img" aria-label="Generated portrait of ${p.name}" preserveAspectRatio="xMidYMid slice">
-<rect width="200" height="200" fill="#060606"/><circle cx="${a.bgx*2+20}" cy="60" r="70" fill="#8B000B" opacity=".13"/><ellipse cx="100" cy="196" rx="120" ry="26" fill="none" stroke="#C7C9CE" stroke-opacity=".18"/>
-${back}<path d="M42 200C44 160 70 144 ${hx} 144C${hx+32} 144 156 160 158 200Z" fill="${a.cloth}"/>${collar}
-<rect x="${hx-13}" y="${hy+ry-12}" width="26" height="${64-ry+12}" fill="${s}"/><rect x="${hx-13}" y="${hy+ry-12}" width="26" height="14" fill="#000" opacity=".25"/>
-<ellipse cx="${hx}" cy="${hy}" rx="${rx}" ry="${ry}" fill="${s}"/>${shade}${rim}
-<ellipse cx="${hx-ex}" cy="${eyeY}" rx="3.6" ry="2.6" fill="${a.eye}"/><ellipse cx="${hx+ex}" cy="${eyeY}" rx="3.6" ry="2.6" fill="${a.eye}"/>
-<path d="${brow}" stroke="${a.hair}" stroke-width="2.2" fill="none" stroke-linecap="round"/><path d="M${hx} ${eyeY+4}q-4 12 2 14" stroke="#00000044" stroke-width="1.6" fill="none"/>
-<path d="${mouth}" stroke="#2a0f10" stroke-width="2" fill="none" stroke-linecap="round"/>${front}${accs}</svg>`;
+  const a = p.av, R = a.R, cx = 100, cy = 104, s = a.side, u = "c" + p.id;
+  let o = `<svg viewBox="0 0 200 200" role="img" aria-label="Generated illustration of the planet ${p.name}" preserveAspectRatio="xMidYMid slice"><rect width="200" height="200" fill="#030303"/>`;
+  for (const [x, y, r, op] of a.stars) o += `<circle cx="${x}" cy="${y}" r="${r}" fill="#C7C9CE" opacity="${op}"/>`;
+  o += `<circle cx="${cx + s * R * .4}" cy="${cy}" r="${R * 1.6}" fill="#8B000B" opacity="${.07 + a.glow * .05}"/>`;
+  if (a.beam) o += `<path d="M${cx} 0V${cy - R}" stroke="#FF202A" stroke-width="1" opacity=".65"/>`;
+  const rings = [], arcs = [];
+  if (a.ring) for (let k = 0; k < a.rc; k++) {
+    const rx = R * (1.4 + k * .24), ry = rx * .2, c = k % 2 ? "#C7C9CE" : "#85858B", w = (1.6 - k * .3).toFixed(2);
+    rings.push(`<ellipse cx="${cx}" cy="${cy}" rx="${rx}" ry="${ry}" fill="none" stroke="${c}" stroke-opacity=".6" stroke-width="${w}"/>`);
+    arcs.push(`<path d="M${cx - rx} ${cy}A${rx} ${ry} 0 0 0 ${cx + rx} ${cy}" fill="none" stroke="${c}" stroke-width="${w}"/>`);
+  }
+  if (a.ring) o += `<g transform="rotate(${a.tilt} ${cx} ${cy})">${rings.join("")}</g>`;
+  o += `<defs><clipPath id="${u}"><circle cx="${cx}" cy="${cy}" r="${R}"/></clipPath></defs><circle cx="${cx}" cy="${cy}" r="${R}" fill="${a.base}"/><g clip-path="url(#${u})">`;
+  for (const b of a.bands) o += `<rect x="${cx - R}" y="${cy + b.y}" width="${2 * R}" height="${b.h}" fill="${a.band}" opacity="${b.o}"/>`;
+  for (const [x, y, r] of a.craters) o += `<ellipse cx="${cx + x}" cy="${cy + y}" rx="${r}" ry="${r * .8}" fill="#000" opacity=".3"/>`;
+  o += `<circle cx="${cx - s * R * .45}" cy="${cy}" r="${R * 1.05}" fill="#000" opacity=".78"/></g>`;
+  o += `<path d="M${cx} ${cy - R}A${R} ${R} 0 0 ${s > 0 ? 1 : 0} ${cx} ${cy + R}" fill="none" stroke="#C7C9CE" stroke-width="1.6" opacity=".9"/>`;
+  o += `<path d="M${cx} ${cy - R - 3}A${R + 3} ${R + 3} 0 0 ${s > 0 ? 1 : 0} ${cx} ${cy + R + 3}" fill="none" stroke="#FF202A" stroke-width="2" opacity="${.25 + a.glow * .15}"/>`;
+  if (a.ring) o += `<g transform="rotate(${a.tilt} ${cx} ${cy})">${arcs.join("")}</g>`;
+  for (const t of a.moonA) o += `<circle cx="${cx + Math.cos(t) * R * 2.05}" cy="${cy + Math.sin(t) * R * .8}" r="3.4" fill="#C7C9CE" opacity=".85"/>`;
+  return o + `</svg>`;
 }
-const safeAvatar = p => { try { return avatar(p); } catch { return `<svg viewBox="0 0 200 200"><rect width="200" height="200" fill="#060606"/><circle cx="100" cy="80" r="34" fill="none" stroke="#C7C9CE"/><path d="M100 0v40" stroke="#FF202A"/></svg>`; } };
+const safeAvatar = p => { try { return avatar(p); } catch { return `<svg viewBox="0 0 200 200"><rect width="200" height="200" fill="#030303"/><circle cx="100" cy="100" r="46" fill="#050505" stroke="#C7C9CE"/><path d="M100 0v54" stroke="#FF202A"/></svg>`; } };
 
 /* ---------- Feed with batching + windowing ---------- */
 const feed = $("feed"), sentinel = $("sentinel");
 const batches = [];
 let estH = 0, created = 0, topIdx = 0, failing = false;
 const idOf = (b, j) => BigInt(b * BATCH + j) + 1n;
-const card = p => `<button class="card" type="button" data-id="${p.id}" aria-label="Open ${p.name}, identity ${p.id}"><div class="av">${safeAvatar(p)}</div><div class="meta"><b>${p.name}</b><span class="id">№ ${p.id}</span><p>${p.desc}</p></div><span class="open">Open identity record</span></button>`;
+const card = p => `<button class="card" type="button" data-id="${p.id}" aria-label="Open ${p.name}, planet ${p.id}"><div class="av">${safeAvatar(p)}</div><div class="meta"><b>${p.name}</b><span class="id">№ ${p.id}</span><p>${p.desc}</p></div><span class="open">Open planet record</span></button>`;
 
 function mount(el) {
   if (el.dataset.m === "1") return;
@@ -147,7 +134,7 @@ function addBatch() {
     el.dataset.b = created; el.dataset.m = "0"; el.className = "batch off";
     el.style.height = (estH || 600) + "px";
     feed.appendChild(el); batches.push(el); io.observe(el); created++;
-    $("count").textContent = `${(created * BATCH).toLocaleString()} identities discovered so far`;
+    $("count").textContent = `${(created * BATCH).toLocaleString()} planets discovered so far`;
     failing = false;
   } catch { failing = true; showRetry(); }
 }
@@ -168,22 +155,22 @@ let cur = null, lastFocus = null;
 const parseId = s => { s = String(s || "").trim().replace(/[,_\s]/g, ""); if (!/^\d{1,400}$/.test(s)) return null; const n = BigInt(s); return n >= 1n ? n : null; };
 function render(id) {
   const p = gen(id), prev = id > 1n;
-  dlg.innerHTML = `<form method="dialog" class="x"><button aria-label="Close identity record">✕</button></form>
+  dlg.innerHTML = `<form method="dialog" class="x"><button aria-label="Close planet record">✕</button></form>
 <div class="rec"><div class="pav">${safeAvatar(p)}</div><div class="pbody">
-<h2 id="pName">${p.name}</h2><p class="pid" id="pId">Identity № ${p.id}</p>
-<dl><dt>Role</dt><dd>${p.role}</dd><dt>Origin</dt><dd>${p.origin}</dd><dt>Apparent age</dt><dd>${p.age}</dd><dt>Character</dt><dd>${p.t.join(", ")}</dd></dl>
-<div class="tags" aria-label="Interests">${p.hobbies.map(h => `<span>${h}</span>`).join("")}</div>
-<p class="bio">${p.bio}</p><p class="bio" style="margin-top:10px;font-size:.74rem;color:var(--mute);border:0;padding:0">Fictional, procedurally generated record. The portrait is an illustration, not a photograph.</p></div></div>
-<div class="acts"><button type="button" id="aPrev" ${prev ? "" : "disabled"} aria-label="Previous identity">← Previous</button><button type="button" id="aNext" aria-label="Next identity">Next →</button>
+<h2 id="pName">${p.name}</h2><p class="pid" id="pId">Planet № ${p.id}</p>
+<dl><dt>Class</dt><dd>${p.type}</dd><dt>Atmosphere</dt><dd>${p.atm}</dd><dt>Diameter</dt><dd>${p.diam}</dd><dt>Orbit</dt><dd>${p.orbit}</dd><dt>Moons</dt><dd>${p.moons}</dd><dt>Gravity</dt><dd>${p.grav}</dd><dt>Surface</dt><dd>${p.temp}</dd><dt>Region</dt><dd>${p.origin}</dd><dt>Character</dt><dd>${p.t.join(", ")}</dd></dl>
+<div class="tags" aria-label="Known for">${p.feats.map(h => `<span>${h}</span>`).join("")}</div>
+<p class="bio">${p.bio}</p><p class="bio" style="margin-top:10px;font-size:.74rem;color:var(--mute);border:0;padding:0">Fictional, procedurally generated planet. The picture is an illustration, not a photograph or a real astronomical object.</p></div></div>
+<div class="acts"><button type="button" id="aPrev" ${prev ? "" : "disabled"} aria-label="Previous planet">← Previous</button><button type="button" id="aNext" aria-label="Next planet">Next →</button>
 <span class="sp"></span><button type="button" id="aCid">Copy identifier</button><button type="button" id="aCl">Copy link</button>${navigator.share ? '<button type="button" id="aSh">Share</button>' : ""}<button type="button" id="aBack">Back to feed</button></div>`;
   $("aPrev").onclick = () => go(cur - 1n); $("aNext").onclick = () => go(cur + 1n);
   $("aCid").onclick = () => copy(String(cur), "Identifier copied"); $("aCl").onclick = () => copy(link(cur), "Link copied");
-  if ($("aSh")) $("aSh").onclick = () => navigator.share({ title: p.name, text: `${p.name} — identity ${p.id}`, url: link(cur) }).catch(() => {});
+  if ($("aSh")) $("aSh").onclick = () => navigator.share({ title: p.name, text: `${p.name} — planet ${p.id}`, url: link(cur) }).catch(() => {});
   $("aBack").onclick = () => dlg.close();
   dlg.scrollTop = 0;
 }
 const link = id => location.origin + location.pathname + "?profile=" + id;
-function go(id) { if (id < 1n) return; cur = id; try { render(id); } catch { toast("Could not render that identity"); } history.replaceState(null, "", "?profile=" + id); const f = $("aNext"); if (f && document.activeElement === document.body) f.focus(); }
+function go(id) { if (id < 1n) return; cur = id; try { render(id); } catch { toast("Could not render that planet"); } history.replaceState(null, "", "?profile=" + id); const f = $("aNext"); if (f && document.activeElement === document.body) f.focus(); }
 function openProfile(id) {
   lastFocus = document.activeElement;
   if (!dlg.open) dlg.showModal();
@@ -219,7 +206,7 @@ $("nameForm").onsubmit = e => {
   if (q.length < 2) { toast("Type at least 2 letters"); return; }
   const max = Math.min(created * BATCH, 5000), out = [];
   for (let i = 1; i <= max && out.length < 12; i++) { const p = gen(BigInt(i)); if (p.name.toLowerCase().includes(q)) out.push(p); }
-  ul.innerHTML = out.length ? "" : `<li class="note">No discovered identity matches. Scroll further, or use an exact identifier.</li>`;
+  ul.innerHTML = out.length ? "" : `<li class="note">No discovered planet matches. Scroll further, or use an exact identifier.</li>`;
   for (const p of out) { const li = document.createElement("li"); li.innerHTML = `<button type="button">${p.name}<span>№ ${p.id}</span></button>`; li.firstChild.onclick = () => { $("find").close(); openProfile(p.id); }; ul.appendChild(li); }
 };
 
