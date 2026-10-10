@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#030303">
+<title>Crimson Singularity — One void. Infinite identities.</title>
+<meta name="description" content="An endless, deterministic universe of generated humanoid identities.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%23030303'/%3E%3Ccircle cx='16' cy='18' r='8' fill='%23000' stroke='%23C7C9CE'/%3E%3Cpath d='M16 2v10' stroke='%23FF202A' stroke-width='2'/%3E%3C/svg%3E">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header class="bar">
+  <a class="brand" href="#discover" aria-label="Crimson Singularity">Crimson Singularity</a>
+  <nav aria-label="Main">
+    <button id="nDiscover" type="button">Discover</button>
+    <button id="nRandom" type="button">Random identity</button>
+    <button id="nFind" type="button">Find identity</button>
+    <button id="nContinue" type="button" hidden>Continue exploring</button>
+    <button id="nAbout" type="button">About</button>
+  </nav>
+</header>
+
+<main>
+  <section class="hero" id="hero" aria-labelledby="title">
+    <span class="beam" aria-hidden="true"></span>
+    <div class="hero-text">
+      <h1 id="title">Crimson Singularity</h1>
+      <p class="tag">One void. Infinite identities.</p>
+      <p class="sub">An endless universe of identities, waiting to be discovered.</p>
+      <button class="cta" id="enter" type="button">Enter the singularity</button>
+    </div>
+  </section>
+
+  <section id="discover" class="discover" aria-label="Identity directory">
+    <div class="discover-head">
+      <h2>Identity directory</h2>
+      <p id="count" aria-live="off">0 identities discovered</p>
+    </div>
+    <div id="feed" class="feed"></div>
+    <div id="sentinel" class="sentinel" role="status"><span class="ring" aria-hidden="true"></span><span id="loadTxt">Reaching further into the void…</span></div>
+  </section>
+</main>
+
+<dialog id="profile" class="panel profile" aria-labelledby="pName"></dialog>
+
+<dialog id="find" class="panel small" aria-labelledby="fT">
+  <form method="dialog" class="x"><button aria-label="Close">✕</button></form>
+  <h2 id="fT">Find identity</h2>
+  <form id="findForm">
+    <label for="fId">Exact identifier</label>
+    <input id="fId" inputmode="numeric" autocomplete="off" placeholder="e.g. 48151623420000000000000000042">
+    <button class="cta s" type="submit">Open identity</button>
+  </form>
+  <form id="nameForm">
+    <label for="fName">Name among discovered identities</label>
+    <input id="fName" autocomplete="off" placeholder="e.g. Vael">
+    <button class="cta s ghost" type="submit">Search discovered</button>
+  </form>
+  <p class="note" id="fNote">Identifier lookup is exact and works for any whole number. Name search only covers identities already discovered in this feed (up to the first 5,000); an infinite universe cannot be searched exhaustively.</p>
+  <ul id="fRes" class="res"></ul>
+</dialog>
+
+<dialog id="about" class="panel small" aria-labelledby="aT">
+  <form method="dialog" class="x"><button aria-label="Close">✕</button></form>
+  <h2 id="aT">About the universe</h2>
+  <p>Every identity here is computed from its number. Identity 1 and identity 10<sup>100</sup> are produced by the same rules, so nothing is stored and nothing runs out: the feed simply keeps generating the next batch as you scroll.</p>
+  <p>Names, histories and portraits are fictional. The portraits are small procedurally drawn illustrations, not photographs of real people, and no hand-made artwork exists for each identity.</p>
+  <p>The same number always gives the same identity, so a copied link or identifier will rebuild it on any device. Only your intro preference and last position are saved, in this browser.</p>
+  <button class="cta s ghost" id="replay" type="button">Show the intro again</button>
+</dialog>
+
+<div id="toast" class="toast" role="status" aria-live="polite"></div>
+<script src="script.js"></script>
+</body>
+</html>
